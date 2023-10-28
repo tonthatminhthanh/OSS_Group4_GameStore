@@ -1,0 +1,84 @@
+
+*
+{
+    font-family: 'DEC Terminal Modern', sans-serif;
+}
+
+body
+{
+    margin: 0;
+}
+
+#header
+{
+    display: flex;
+    text-align: center;
+    width: 100%;
+    background: linear-gradient(to right, #0c0a0a 0%, #e72c2c 100%);
+    height: 100px;
+    align-items: center;
+    margin: 0;
+    color: white;
+    position: relative;
+}
+
+#header p
+{
+    display: inline-block;
+    margin: 0;
+    font-size: larger;
+    font-weight: bold;
+    font-style: italic;
+    text-shadow: 2px 2px #ff99cc;
+    padding-left: 10px;
+}
+
+#header img
+{
+    display: inline-block;
+    max-height: 80px;
+    max-width: 80px;
+    border:   #8DEEEE   solid;
+    border-radius: 100%;
+    flex-basis: 40%;
+    margin-left: 10px;
+}
+
+#navbar
+{
+    display: block;
+    width: 100%;
+    margin: 0;
+    /* background-color: #33ccff; */
+    margin-top: 1px;
+}
+
+#navbar ul
+{
+    padding: 0;
+    list-style: none;
+    margin: 0;
+}
+
+#navbar li
+{
+    display: inline-block;
+    margin-left: 20px;
+}
+
+#navbar a
+{
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+#navbar li:hover
+{
+    background-color: #ff99cc;
+}
+
+#navbar li:active a
+{
+    text-shadow: 2px 2px #33ccff;
+}
