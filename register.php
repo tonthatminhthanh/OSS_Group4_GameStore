@@ -7,12 +7,9 @@
         <link rel="stylesheet" href="https://codepen.io/gymratpacks/pen/VKzBEp#0">
         <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="register.css">
-        <link rel="stylesheet" href="css/footer.css">
-        <link rel="stylesheet" href="css/index.css">
     </head>
     <body>
     <?php
-        require("header.html");
         $servername = "localhost";
         $username = "root";
         $password = "";
@@ -37,7 +34,7 @@
               echo "<script>alert('Ngày sinh không hợp lệ','Thông báo từ hệ thống');</script>";
             }
             if(filter_var($email, FILTER_VALIDATE_EMAIL)){
-              if (preg_match("/^[A-Za-z0-9_ ]{0,100}$/", $name)) {
+              if (preg_match("/^[A-Za-z0-9_ ]{4,100}$/", $name)) {
                 $pattern = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@#$%^&*()_+{}:<>?]).{8,20}$/";
                 if (preg_match($pattern, $password)) {
                   if($password == $password2){
@@ -147,8 +144,5 @@
         </div>
       </div>
       <script  src="js/register.js"></script>
-      <?php 
-        require("footer.html");
-      ?>
     </body>
 </html>
