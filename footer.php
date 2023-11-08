@@ -1,5 +1,5 @@
 
-        <footer class="footer">
+<footer class="footer">
             <div class="footer-content">
                 <div class="footer-column contact-info-left">
                     <img src="img/GA.png" alt="Logo">
