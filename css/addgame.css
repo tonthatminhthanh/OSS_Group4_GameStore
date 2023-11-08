@@ -1,0 +1,11 @@
+.addgame {
+    margin: auto;
+    align-items: center;
+    font-size: x-large;
+    margin-top: 5%;
+
+}
+table {
+    border-collapse: separate;
+    border-spacing: 10px; 
+}
