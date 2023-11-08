@@ -39,6 +39,7 @@
 						$_SESSION["logged_in"] = $row["khach_hang_id"];
 						$_SESSION["logged_in_name"] = $row["ten_khach_hang"];
 						$_SESSION["curr_pfp"] = $row["anh_dai_dien"];
+						$_SESSION["logged_in_mail"] = $row["email"];
 						echo "<script>alert($pfp,'Thông báo từ hệ thống');</script>";
 						header("Location: index.php");
 					}

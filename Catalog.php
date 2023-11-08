@@ -6,7 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>trang chủ</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+    <title>Catalog</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
         <link rel="stylesheet" href="css/footer.css">
         <link href="https://fonts.cdnfonts.com/css/dec-terminal-modern" rel="stylesheet">
@@ -15,6 +16,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+    <main class="container" style="width: 55%;margin: 0 auto">
     <?php
         $servername = "localhost";
         $username = "root";
@@ -25,14 +27,23 @@
             die("Connection failed: " . $conn->connect_error);
         }
 
+        if(isset($_GET["search"]))
+        {
+            $search = $_GET["search"];
+        }
+        else
+        {
+            $search = "";
+        }
+
         // Lấy tổng số hàng trong bảng mat_hang
-        $sql = "SELECT COUNT(*) AS total_rows FROM mat_hang";
+        $sql = "SELECT COUNT(*) AS total_rows FROM mat_hang WHERE ten_mat_hang LIKE '%$search%'";
         $result = $conn->query($sql);
         $row = $result->fetch_assoc();
         $total_rows = $row['total_rows'];
 
         // Lấy số trang
-        $pages = ceil($total_rows / 2);
+        $pages = $total_rows / 2;
 
         // Lấy trang hiện tại
         $current_page = (isset($_GET['page'])) ? $_GET['page'] : 1;
@@ -44,14 +55,14 @@
         $sql = "SELECT mat_hang.mat_hang_id, mat_hang.mo_ta,mat_hang.ten_mat_hang, mat_hang.don_gia, the_loai.ten_the_loai, dev_team.dev_name, mat_hang.anh
         FROM mat_hang
         JOIN dev_team ON mat_hang.dev_team_id = dev_team.dev_id
-        JOIN the_loai ON mat_hang.the_loai = the_loai.the_loai_id LIMIT $offset, 2";
+        JOIN the_loai ON mat_hang.the_loai = the_loai.the_loai_id WHERE ten_mat_hang LIKE '%$search%' LIMIT $offset, 5";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo "<div style='display: flex; width:800px; margin-bottom: 10px;'>";
                 echo "<div style='width: 20%; margin-top: 20px;'>";
-                echo "<img src='game_image/{$row['anh']}' width='100px'>";
+                echo "<img src='game_img/{$row['anh']}' width='100px'>";
                 echo "</div>";
                 echo "<div style='width: 80%;'>";
                 echo "<div style='text-align: center;'>" . $row['ten_mat_hang'] . "</div><br>";
@@ -76,5 +87,9 @@
 
         $conn->close();
     ?>
+    </main>
+    <div>
+    <?php require("footer.php"); ?>
+    </div>
 </body>
 </html>
