@@ -94,7 +94,7 @@
             <form method="post">
                 <h4>Khiếu nại</h4>
                 <h5>Nội dung:</h5><br>
-                <textarea name="txt" style="width: 250px; height: 250px;text-align:left" required></textarea><br>
+                <textarea name="txt" style="width: 250px; height: 250px;text-align:left; resize: none" required></textarea><br>
                 <input type="submit" name="send_mail" value="Gửi">
                 <input type="button" onclick="close_modal()" value="Đóng">
             </form>
