@@ -21,9 +21,12 @@
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    if(isset($_GET["search"]))
+    if(isset($_GET["submit"]))
     {
-        $search = $_GET["search"];
+        if(isset($_GET["search"]))
+        {
+            $search = $_GET["search"];
+        }
     }
     else
     {
@@ -35,9 +38,9 @@
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
     $total_rows = $row['total_rows'];
-
+    $num_entries = 2;
     // Lấy số trang
-    $pages = $total_rows / 2;
+    $pages = $total_rows / $num_entries;
 
     // Lấy trang hiện tại
     $current_page = (isset($_GET['page'])) ? $_GET['page'] : 1;
@@ -49,7 +52,7 @@
     $sql = "SELECT mat_hang.mat_hang_id, mat_hang.mo_ta,mat_hang.ten_mat_hang, mat_hang.don_gia, the_loai.ten_the_loai, dev_team.dev_name, mat_hang.anh
     FROM mat_hang
     JOIN dev_team ON mat_hang.dev_team_id = dev_team.dev_id
-    JOIN the_loai ON mat_hang.the_loai = the_loai.the_loai_id WHERE ten_mat_hang LIKE '%$search%' LIMIT $offset, 5";
+    JOIN the_loai ON mat_hang.the_loai = the_loai.the_loai_id WHERE ten_mat_hang LIKE '%$search%' LIMIT $offset, $num_entries";
     $result = $conn->query($sql);
 ?>
 <html>
@@ -71,6 +74,10 @@
     <body>
         <?php require("admin_panel.php"); ?>
         <a href="addgame.php">Thêm game</a>
+        <form method="get">
+            <input type="text" name="search" value="<?php if(isset($_GET["search"])) {echo $_GET["search"];} ?>">
+            <input type="submit" name="submit" value="Tìm kiếm">
+        </form>
         <table style="">
             <tr>
                 <th>ID</th>
@@ -98,6 +105,14 @@
                         echo "</tr>";
                     }
                 }
+
+                echo "<div class='pagination'>";
+                for ($i = 1; $i <= $pages; $i++) {
+                    echo "<a href='?page=$i' class='page-item'>";
+                    echo "<span class='page-link'>$i</span>";
+                    echo "</a>";
+                }
+                echo "</div>";
             ?>
         </table>
     </body>
