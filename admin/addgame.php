@@ -12,6 +12,20 @@
         
     </head>
     <?php
+        session_start();
+        if (isset($_SESSION["admin_id"]))
+        {
+            if(isset($_POST["log_out"]))
+            {
+                unset($_SESSION["admin_id"]);
+                unset($_SESSION["admin_name"]);
+                header("Location: ../admin_page.php");
+            }
+        }
+        else
+        {
+            header("Location: ../admin_page.php");
+        }
         $servername = "localhost";
         $username = "root";
         $password = "";
@@ -169,7 +183,7 @@
                         </tr>
                         <tr>
                             <td colspan="2" style="text-align: center; padding-top: 20px;">
-                                <a href="index.php" style="color: darkgreen;">quay về</a>
+                                <a href="games.php" style="color: darkgreen;">quay về</a>
                                 <div style="color: red; font-size: 16px; font-weight: bold;"><?php if(isset($msg6)) {echo $msg6;} ?></div>
                             </td>
                         </tr>
