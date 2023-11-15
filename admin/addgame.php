@@ -3,10 +3,10 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-        <link rel="stylesheet" href="css/addgame.css">
-        <link rel="stylesheet" href="css/footer.css">
+        <link rel="stylesheet" href="..//css/addgame.css">
+        <link rel="stylesheet" href="..//css/footer.css">
         <link href="https://fonts.cdnfonts.com/css/dec-terminal-modern" rel="stylesheet">
-        <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="..//css/index.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" 
     crossorigin="anonymous" referrerpolicy="no-referrer" />
         
@@ -79,12 +79,12 @@
                             $type = $_FILES['image']['type'];
                             $name_image = $_FILES['image']['name']; 
                             $tmp_name = $_FILES['image']['tmp_name'];
-                            $file_path = 'game_img' . '/' . $name_image;
+                            $file_path = '..//game_img' . '/' . $name_image;
                             move_uploaded_file($tmp_name, $file_path);
                             $sql = "INSERT INTO mat_hang (ten_mat_hang, don_gia, the_loai, mo_ta, anh, dev_team_id) VALUES ('$gamename', '$price', '$menugame', '$motagame','$name_image', '$menudev')";
                             $result = mysqli_query($conn, $sql);
                             if ($result) {
-                                echo "<script>alert('Thêm game thành công'); window.location.href='index.php';</script>";
+                                echo "<script>alert('Thêm game thành công'); window.location.href='games.php';</script>";
                                 $conn->close();
                             } 
                             
@@ -96,7 +96,7 @@
     ?>
     <body>
         <?php
-            include("header.php");
+            include("..//admin/admin_panel.php");
         ?>
         <main>
             <form action="addgame.php" method="post" enctype="multipart/form-data">
@@ -190,10 +190,5 @@
                     </table>
             </form>
         </main>
-        <div>
-            <?php
-                include("footer.php");
-            ?>
-        </div>
     </body>
 </html>
