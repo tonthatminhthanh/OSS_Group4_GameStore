@@ -1,4 +1,5 @@
     <?php
+        session_start();
         if(isset($_POST["log_out"]))
         {
             unset($_SESSION["logged_in"]);
@@ -6,6 +7,30 @@
             unset($_SESSION["logged_in_mail"]);
             unset($_SESSION["curr_pfp"]);
             unset($_SESSION["logged_in_mail"]);
+        }
+
+        if(isset($_SESSION["logged_in"]))
+        {
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $database = "Gamers_Alliance";
+            $conn = new mysqli($servername, $username, $password, $database);
+            $sql = "SELECT so_du FROM khach_hang WHERE khach_hang_id='{$_SESSION["logged_in"]}'";
+            $result = $conn->query($sql);
+            if($result)
+            {
+                $row = $result->fetch_assoc();
+                $so_du = $row["so_du"];
+            }
+            else
+            {
+                $so_du = "Undefined error";
+                goto End_Money_Query;
+            }
+            $conn->query($sql);
+            End_Money_Query:
+            $conn->close();         
         }
 
         if(isset($_POST["send_mail"]))
@@ -68,6 +93,7 @@
                             $pfp = $_SESSION["curr_pfp"];
                             echo "<li><img style='border-radius: 100%' width='50px' height='50px' src='User_Images/$pfp'>";
                             echo "<a href='ThongtinCaNhan.php'> $name</a></li>";
+                            echo "<li>Số dư: $so_du VNĐ</li>";
                             echo '<li><form method="post"><input type="submit" class="link" value="Log out" name="log_out"></form></li>';
                         }
                     ?>
