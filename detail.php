@@ -1,3 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <link rel="stylesheet" href="css/footer.css">
+        <link href="https://fonts.cdnfonts.com/css/dec-terminal-modern" rel="stylesheet">
+        <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+        
+   
+
+</head>
+<body>
+    
+</body>
+</html>
+<?php
+        
+            
+            include("header.php");
+        ?>
 <?php
     
     
@@ -24,7 +51,7 @@
          
         
 
-        echo "<div style='display: flex; width:800px; margin-bottom: 10px; margin-left:50px; margin-top:50px;
+        echo "<div style='display: flex; width:800px; margin-bottom: 10px; margin-left:300px; margin-top:50px;
        background-color: #FFCCCC   ; border-radius:10px '>";
         echo "<div style='width: 50%; '>";
         echo "<img  src='game_img/{$row['anh']}' style=' border-radius: 10px;' width='300px'  >";
@@ -46,3 +73,6 @@
 
 <a style="margin-left: 50px;" href="catalog.php">Quay lại danh mục sản phẩm</a>
 
+<?php
+            include("footer.php");
+        ?>

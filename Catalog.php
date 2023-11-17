@@ -26,10 +26,37 @@
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
+        //   xữ lý add
+        if(isset($_POST['submit'])){
 
+             if(isset($_POST['mat_hang_id'])){
+              if(isset($_SESSION["cart"])){
+                  
+
+
+              }else{
+                $_SESSION["cart"] = array();
+               
+
+              }
+               
+              $id_mat_hang= $_POST['mat_hang_id'];
+              if(!in_array($id_mat_hang,$_SESSION["cart"])){
+                
+                echo "<script>alert('thêm sản phẩm thành công vào giỏ hàng');</script>";
+                array_push($_SESSION["cart"], $id_mat_hang);
+              }
+              
+
+
+
+             }
+
+
+        }
         if(isset($_GET["search"]))
         {
-            $search = $_GET["search"];
+            $search = $_GET["search"]; 
         }
         else
         {
@@ -72,7 +99,15 @@
                 echo "<div style='display: flex;width:800px;'>";
                 echo "<div style='width: 50%; margin-left: 160px; color: green;'>".$row['dev_name']."</div>";
                 echo "<div style='width: 25%;text-align: right;margin-right: 10px; color: red;'>".$row['don_gia']."VNĐ"."</div>";
-                echo "<div style='width: 25%;text-align: left;'>"."<a href='' style='color: green;'> Xem sản phẩm</a>"."</div>";
+                echo "<div style='width: 25%; text-align: left;'>";
+                echo "<a href='detail.php?id=" . $row['mat_hang_id'] . "' style='color: green;'>Xem sản phẩm</a>"; echo "</div>"; echo "<form method='post'>
+                <input type='hidden' name='mat_hang_id' value='{$row["mat_hang_id"]}'>
+                <input type='submit' name='submit' value='Thêm vào giỏ'>
+                
+                </form>
+                ";
+                
+                
                 echo "</div>";
                 echo "<br>";
             }
@@ -86,6 +121,8 @@
         echo "</div>";
 
         $conn->close();
+
+       
     ?>
     </main>
     <div>
