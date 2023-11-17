@@ -1,10 +1,5 @@
     <?php
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\Exception;
-    
-    require 'sendMail/PHPMailer/src/Exception.php';
-    require 'sendMail/PHPMailer/src/PHPMailer.php';
-    require 'sendMail/PHPMailer/src/SMTP.php';
+        session_start();
         if(isset($_POST["log_out"]))
         {
             unset($_SESSION["logged_in"]);
@@ -14,31 +9,55 @@
             unset($_SESSION["logged_in_mail"]);
         }
 
+        if(isset($_SESSION["logged_in"]))
+        {
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $database = "Gamers_Alliance";
+            $conn = new mysqli($servername, $username, $password, $database);
+            $sql = "SELECT so_du FROM khach_hang WHERE khach_hang_id='{$_SESSION["logged_in"]}'";
+            $result = $conn->query($sql);
+            if($result)
+            {
+                $row = $result->fetch_assoc();
+                $so_du = $row["so_du"];
+            }
+            else
+            {
+                $so_du = "Undefined error";
+                goto End_Money_Query;
+            }
+            $conn->query($sql);
+            End_Money_Query:
+            $conn->close();         
+        }
+
         if(isset($_POST["send_mail"]))
         {
-            
-            
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $database = "Gamers_Alliance";
+            $conn = new mysqli($servername, $username, $password, $database);
             $txt = $_POST["txt"];
-            $email = "tuc.nv.62cntt@ntu.edu.vn";
-            $password = "Tuc123123147";
-            $host = "smtp.gmail.com";
-            $port = 465;
-            $mail = new PHPMailer();
-            $mail->IsSMTP();
-            $mail->Host = $host;
-            $mail->Port = $port;
-            $mail->SMTPAuth = true;
-            $mail->SMTPSecure = 'ssl';
-            $mail->Username = $email;
-            $mail->Password = $password;
-            $mail->addAddress("vantuc779@gmail.com");
-            $mail->Subject = "Gamers_Alliance";
-            $mail->Body = $txt;
-            if ($mail->send()) {
-                echo "<script>alert('Cảm ơn bạn đã góp ý','Thông báo từ hệ thống');</script>";
-            } else {
-                echo "<script>alert('Đã xảy ra sự cố vui lòng kiểm tra lại','Thông báo từ hệ thống');</script>";
+            $sql = "INSERT INTO khieu_nai(khach_hang_id) VALUES('{$_SESSION["logged_in"]}')";
+            $conn->query($sql);
+            $sql = "SELECT khieu_nai_id FROM khieu_nai WHERE khach_hang_id='{$_SESSION["logged_in"]}'";
+            $result = $conn->query($sql);
+            if($result)
+            {
+                $row = $result->fetch_assoc();
+                $kn_id = $row["khieu_nai_id"];
             }
+            else
+            {
+                goto End;
+            }
+            $sql = "INSERT INTO ctkn(khieu_nai_id,mo_ta) VALUES('$kn_id','$txt')";
+            $conn->query($sql);
+            End:
+            $conn->close();
         }
     ?>
     <header>
@@ -62,7 +81,7 @@
                     <li><a href="#"><input type="text" id="search" style="width: 300px; height: 35px; border: none; border-radius: 5px; " placeholder="Search..." value="<?php if(isset($_GET['search'])) { echo $_GET['search']; } ?>"></a></li>
                     <li>  <a href="index.php"> <i class="fa-solid fa-house"></i> Home</a></li>
                     <li><a href="Catalog.php"><i class="fa-solid fa-gamepad"></i> Games</a></li>
-                    <li><a href="#"> <i class="fa-solid fa-users"></i> About me</a></li>
+                    <li><a href="DS.html"> <i class="fa-solid fa-users"></i> About me</a></li>
                     <?php
                         if(!isset($_SESSION["logged_in"]))
                         {
@@ -74,10 +93,11 @@
                             $pfp = $_SESSION["curr_pfp"];
                             echo "<li><img style='border-radius: 100%' width='50px' height='50px' src='User_Images/$pfp'>";
                             echo "<a href='ThongtinCaNhan.php'> $name</a></li>";
+                            echo "<li>Số dư: $so_du VNĐ</li>";
                             echo '<li><form method="post"><input type="submit" class="link" value="Log out" name="log_out"></form></li>';
                         }
                     ?>
-                   <li><a href="#"><i class="fa-brands fa-buromobelexperte"></i> Excerise</a></li>
+                   <li><a href="practice"><i class="fa-brands fa-buromobelexperte"></i> Exercise</a></li>
 
                    <script>
                         var inputNode = document.getElementById("search");
@@ -98,9 +118,9 @@
         </div>
         <div id="mail_modal" style="position: fixed; bottom: 15px; right: 5px; width: 250px; height: 400px;display: none; background-color: #7eed9b">
             <form method="post">
-                <h4>Hòm thư góp ý</h4>
+                <h4>Khiếu nại</h4>
                 <h5>Nội dung:</h5><br>
-                <textarea name="txt" style="width: 250px; height: 250px;text-align:left" required></textarea><br>
+                <textarea name="txt" style="width: 250px; height: 250px;text-align:left; resize: none" required></textarea><br>
                 <input type="submit" name="send_mail" value="Gửi">
                 <input type="button" onclick="close_modal()" value="Đóng">
             </form>
