@@ -38,7 +38,7 @@
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
     $total_rows = $row['total_rows'];
-    $num_entries = 2;
+    $num_entries = 5;
     // Lấy số trang
     $pages = $total_rows / $num_entries;
 

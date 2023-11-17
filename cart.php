@@ -50,8 +50,7 @@
             <h1>GIỎ BÁN HÀNG CỦA BẠN</h1>
                 <?php
                     $tong_tien = 0;
-                    $i = 0 ;
-                    foreach($_SESSION["cart"]  as $phantu)
+                    foreach($_SESSION["cart"]  as $i => $phantu)
                     { 
                         $info = get_item_info($conn,$phantu);
                         $img = $info["anh"];
@@ -66,7 +65,7 @@
                                     <table>
                                         <tr>
                                             <td>
-                                                <img style='max-width: 100px;max-height: 100px' src='$img'>
+                                                <img style='max-width: 100px;max-height: 100px' src='game_img/$img'>
                                             </td>
                                             <td>
                                                 <h3>$ten_mh</h3>
@@ -82,7 +81,6 @@
                                 </div>
                             </div>
                         ";
-                     $i++;
                     }
                     if(count($_SESSION["cart"]) == 0)
                     {

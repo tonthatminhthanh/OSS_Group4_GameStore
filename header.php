@@ -82,6 +82,7 @@
                     <li>  <a href="index.php"> <i class="fa-solid fa-house"></i> Home</a></li>
                     <li><a href="Catalog.php"><i class="fa-solid fa-gamepad"></i> Games</a></li>
                     <li><a href="DS.html"> <i class="fa-solid fa-users"></i> About me</a></li>
+                    <li><a href="cart.php"> <i class="fa-solid fa-shopping-cart"></i></a></li>
                     <?php
                         if(!isset($_SESSION["logged_in"]))
                         {
