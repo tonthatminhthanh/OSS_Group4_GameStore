@@ -12,25 +12,52 @@
         
     </head>
     <?php
+        /*ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);*/
         session_start();
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $database = "Gamers_Alliance";
+        $conn = new mysqli($servername, $username, $password, $database);
+
         if (isset($_SESSION["admin_id"]))
         {
             if(isset($_POST["log_out"]))
             {
                 unset($_SESSION["admin_id"]);
                 unset($_SESSION["admin_name"]);
-                header("Location: ..//admin_page.php");
+                header("Location: ../admin_page.php");
             }
         }
         else
         {
-            header("Location: ..//admin_page.php");
+            header("Location: ../admin_page.php");
         }
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $database = "Gamers_Alliance";
-        $conn = new mysqli($servername, $username, $password, $database);
+
+        if(empty($_GET["id"]))
+        {
+            header("Location: games.php");
+        }
+        else
+        {
+            $sql = "SELECT * FROM mat_hang WHERE mat_hang_id = '{$_GET["id"]}'";
+            $result = $conn->query($sql);
+            if($result->num_rows <= 0)
+            {
+                header("Location: games.php");
+            }
+            $row = $result->fetch_assoc();
+            $gamename = $row["ten_mat_hang"];
+            $price = $row["don_gia"];
+            $menugame = $row["the_loai"];
+            $menudev = $row["dev_team_id"];
+            $motagame = $row["mo_ta"];
+            $name_game = $row["file_name"];
+            $name_image = $row["anh"];
+        }
+
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
@@ -62,45 +89,37 @@
                 $msg5 = "Vui lòng chọn Dev Team";
             }
             else{
-                    $sql = "SELECT *
-                    FROM mat_hang
-                    WHERE ten_mat_hang = '$gamename';";
-                    $result = $conn->query($sql);
-                    if ($result->num_rows > 0) {
-                        $msg1 = "Trùng tên";
-                    }else {         
-                        if(empty($_FILES["image"]["name"])) {
-                            echo "<script>alert('Không có ảnh');</script>";           
-                        }
-                        elseif ($_FILES["filename"]["size"] == 0) {
-                            echo "<script>alert('Không có file game');</script>"; 
-                        }                        
-                        else{
-                            $_FILES['image']['name'] = $gamename. '.png';
-                            $size = $_FILES['image']['size'];
-                            $type = $_FILES['image']['type'];
-                            $name_image = $_FILES['image']['name']; 
-                            $tmp_name = $_FILES['image']['tmp_name'];
-                            $file_path = '..//game_img' . '/' . $name_image;
-                            move_uploaded_file($tmp_name, $file_path);
-                            //
-                            $_FILES['filename']['name'] = $gamename. '.zip';
-                            $size = $_FILES['filename']['size'];
-                            $type = $_FILES['filename']['type'];
-                            $name_file = $_FILES['filename']['name']; 
-                            $tmp_name = $_FILES['filename']['tmp_name'];
-                            $file_path = '..//games' . '/' . $name_file;
-                            move_uploaded_file($tmp_name, $file_path);
-                            $sql = "INSERT INTO mat_hang (ten_mat_hang, don_gia, the_loai, mo_ta, anh, dev_team_id, file_name) VALUES ('$gamename', '$price', '$menugame', '$motagame','$name_image', '$menudev','$name_file')";
-                            $result = mysqli_query($conn, $sql);
-                            if ($result) {
-                                echo "<script>alert('Thêm game thành công'); window.location.href='games.php';</script>";
-                                $conn->close();
-                            } 
-                            
-                        }
+                if(!empty($_FILES["image"]["name"])) {
+                    $new_name = str_replace(" ", "_", $gamename.uniqid());
+                    $_FILES['image']['name'] = $new_name. '.png';
+                    $size = $_FILES['image']['size'];
+                    $type = $_FILES['image']['type'];
+                    $name_image = $_FILES['image']['name']; 
+                    $tmp_name = $_FILES['image']['tmp_name'];
+                    $file_path = '..//game_img' . '/' . $name_image;
+                    move_uploaded_file($tmp_name, $file_path);
+                    
+                }
+                if(!empty($_FILES["game"]["name"])) {
+                    $new_name = str_replace(" ", "_", $gamename.uniqid());
+                    $_FILES['game']['name'] = $new_name. '.zip';
+                    $size = $_FILES['game']['size'];
+                    $type = $_FILES['game']['type'];
+                    $name_game = $_FILES['game']['name'];
+                    $tmp_name = $_FILES['game']['tmp_name'];
+                    $file_path = '..//games' . '/' . $name_game;
+                    move_uploaded_file($tmp_name, $file_path);
+                    
+                    
+                }
+                $motagame = '"' . $motagame . '"';
+                $sql = "UPDATE mat_hang SET ten_mat_hang = '$gamename', don_gia = '$price', the_loai = '$menugame', mo_ta = $motagame, anh = '$name_image', dev_team_id = '$menudev', file_name = '$name_game' WHERE mat_hang_id = '{$_GET["id"]}'";
+                    $result = mysqli_query($conn, $sql);
+                    if ($result) {
+                        echo "<script>alert('Sửa game thành công'); window.location.href='games.php';</script>";
+                        $conn->close();
+                        header("Location: games.php");
                     }
-                
             }
         }
     ?>
@@ -109,7 +128,7 @@
             include("..//admin/admin_panel.php");
         ?>
         <main>
-            <form action="addgame.php" method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data">
                     <table class="addgame">
                         <tr>
                             <th >Tên Game</th>
@@ -163,6 +182,12 @@
                             </td>
                         </tr>
                         <tr>
+                            <th>File game</th>
+                            <td>
+                                <input type="file" name="game" id="image" accept=".zip">
+                            </td>
+                        </tr>
+                        <tr>
                             <th>Dev Team</th>
                             <td>
                                 <select id="menudev" name="menudev">
@@ -184,12 +209,6 @@
                                 </select>
 
                                 <div style="color: red; font-size: 16px; font-weight: bold;"><?php if(isset($msg5)) {echo $msg5;} ?></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>File Game</th>
-                            <td>
-                            <input type="file" name="filename" id="filename" accept=".zip">
                             </td>
                         </tr>
                         <tr>
