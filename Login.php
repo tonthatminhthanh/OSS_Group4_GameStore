@@ -10,7 +10,11 @@
 </head>
 <body>
 <?php
-	include("header.php");
+	session_start();
+	if (isset($_SESSION["logged_in"]))
+	{
+		header("Location: index.php");
+	}
 	if(isset($_POST['login'])){
 		$servername = "localhost";
         $username = "root";
@@ -34,6 +38,16 @@
   				$password = $row["password"];
 				if (password_verify($pass, $password)) {
 					echo "<script>alert('Bạn đã đăng nhập thành công','Thông báo từ hệ thống');</script>";
+					session_start();
+					if(!isset($_SESSION["logged_in"]))
+					{
+						$_SESSION["logged_in"] = $row["khach_hang_id"];
+						$_SESSION["logged_in_name"] = $row["ten_khach_hang"];
+						$_SESSION["curr_pfp"] = $row["anh_dai_dien"];
+						$_SESSION["logged_in_mail"] = $row["email"];
+						echo "<script>alert($pfp,'Thông báo từ hệ thống');</script>";
+						header("Location: index.php");
+					}
 				}else{
 					echo "<script>alert('mật khẩu không chính xác','Thông báo từ hệ thống');</script>";
 				}
@@ -46,9 +60,8 @@
 		header("Location: /register.php");
 	}
 ?>
-<div style="padding-top: 125px;"></div>
 <form method="post" action="#">
-	<div style="min-height: 1024px">
+	<div style="min-height: 500px">
 	<div class="svgContainer">
 		<div>
 			<svg class="mySVG" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200">
@@ -161,8 +174,5 @@
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js'></script>
 <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/MorphSVGPlugin.min.js?r=182'></script><script  src="js/style.js"></script>
-<?php 
-	include("footer.php");
-?>
 </body>
 </html>
