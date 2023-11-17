@@ -1,13 +1,13 @@
 <?php
-    $_SESSION["cart"] = array();
-
+    
+ session_start();
     $hostname = "localhost";
     $uname = "root";
     $passwd = "";
     $db_name = "Gamers_Alliance";
 
     $conn = new mysqli($hostname, $uname, $passwd, $db_name);
-
+//    sữ lý thông tin cung cấp lấy dữ liệu từ database
     if($conn)
     {
         function get_item_info($conn, $item_id)
@@ -24,7 +24,7 @@
             return $info;
         }
 
-        if(is_numeric($_GET["delete"]))
+        if(isset($_GET["delete"]) && is_numeric($_GET["delete"]))
         {
             $index = $_GET["delete"];
             unset($_SESSION["cart"][$index]);
@@ -38,7 +38,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
             body {
-                background: linear-gradient(#0c0a0a 25%, #e72c2c 100%); !important;
+                background: linear-gradient(#0c0a0a 25%, #e72c2c 100%) !important;
                 color: white !important
             }
         </style>
@@ -50,9 +50,10 @@
             <h1>GIỎ BÁN HÀNG CỦA BẠN</h1>
                 <?php
                     $tong_tien = 0;
-                    for($i = 0;$i < count($_SESSION["cart"]);$i++)
-                    {
-                        $info = get_item_info($conn,$_SESSION["cart"][$i]);
+                    $i = 0 ;
+                    foreach($_SESSION["cart"]  as $phantu)
+                    { 
+                        $info = get_item_info($conn,$phantu);
                         $img = $info["anh"];
                         $ten_mh = $info["ten_mat_hang"];
                         $mo_ta = $info["mo_ta"];
@@ -81,6 +82,7 @@
                                 </div>
                             </div>
                         ";
+                     $i++;
                     }
                     if(count($_SESSION["cart"]) == 0)
                     {
@@ -93,5 +95,6 @@
             </div>
         </div>
         </div>
+     <a href="Catalog.php">Quay lại</a> 
     </body>
 </html>
