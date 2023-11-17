@@ -12,6 +12,9 @@
         
     </head>
     <?php
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
         session_start();
         if (isset($_SESSION["admin_id"]))
         {
@@ -91,7 +94,8 @@
                             $tmp_name = $_FILES['filename']['tmp_name'];
                             $file_path = '..//games' . '/' . $name_file;
                             move_uploaded_file($tmp_name, $file_path);
-                            $sql = "INSERT INTO mat_hang (ten_mat_hang, don_gia, the_loai, mo_ta, anh, dev_team_id, file_name) VALUES ('$gamename', '$price', '$menugame', '$motagame','$name_image', '$menudev','$name_file')";
+                            $motagame = '"' . $motagame . '"';
+                            $sql = "INSERT INTO mat_hang (ten_mat_hang, don_gia, the_loai, mo_ta, anh, dev_team_id, file_name) VALUES ('$gamename', '$price', '$menugame', $motagame,'$name_image', '$menudev','$name_file')";
                             $result = mysqli_query($conn, $sql);
                             if ($result) {
                                 echo "<script>alert('Thêm game thành công'); window.location.href='games.php';</script>";
