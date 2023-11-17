@@ -81,7 +81,7 @@
                     <li><a href="#"><input type="text" id="search" style="width: 300px; height: 35px; border: none; border-radius: 5px; " placeholder="Search..." value="<?php if(isset($_GET['search'])) { echo $_GET['search']; } ?>"></a></li>
                     <li>  <a href="index.php"> <i class="fa-solid fa-house"></i> Home</a></li>
                     <li><a href="Catalog.php"><i class="fa-solid fa-gamepad"></i> Games</a></li>
-                    <li><a href="#"> <i class="fa-solid fa-users"></i> About me</a></li>
+                    <li><a href="DS.html"> <i class="fa-solid fa-users"></i> About me</a></li>
                     <?php
                         if(!isset($_SESSION["logged_in"]))
                         {
@@ -97,7 +97,7 @@
                             echo '<li><form method="post"><input type="submit" class="link" value="Log out" name="log_out"></form></li>';
                         }
                     ?>
-                   <li><a href="#"><i class="fa-brands fa-buromobelexperte"></i> Excerise</a></li>
+                   <li><a href="practice"><i class="fa-brands fa-buromobelexperte"></i> Exercise</a></li>
 
                    <script>
                         var inputNode = document.getElementById("search");

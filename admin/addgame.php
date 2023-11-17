@@ -19,12 +19,12 @@
             {
                 unset($_SESSION["admin_id"]);
                 unset($_SESSION["admin_name"]);
-                header("Location: ../admin_page.php");
+                header("Location: ..//admin_page.php");
             }
         }
         else
         {
-            header("Location: ../admin_page.php");
+            header("Location: ..//admin_page.php");
         }
         $servername = "localhost";
         $username = "root";
@@ -72,8 +72,10 @@
                         if(empty($_FILES["image"]["name"])) {
                             echo "<script>alert('Không có ảnh');</script>";           
                         }
+                        elseif ($_FILES["filename"]["size"] == 0) {
+                            echo "<script>alert('Không có file game');</script>"; 
+                        }                        
                         else{
-                            $new_name = str_replace(" ", "_", $gamename.uniqid());
                             $_FILES['image']['name'] = $gamename. '.png';
                             $size = $_FILES['image']['size'];
                             $type = $_FILES['image']['type'];
@@ -81,7 +83,15 @@
                             $tmp_name = $_FILES['image']['tmp_name'];
                             $file_path = '..//game_img' . '/' . $name_image;
                             move_uploaded_file($tmp_name, $file_path);
-                            $sql = "INSERT INTO mat_hang (ten_mat_hang, don_gia, the_loai, mo_ta, anh, dev_team_id) VALUES ('$gamename', '$price', '$menugame', '$motagame','$name_image', '$menudev')";
+                            //
+                            $_FILES['filename']['name'] = $gamename. '.zip';
+                            $size = $_FILES['filename']['size'];
+                            $type = $_FILES['filename']['type'];
+                            $name_file = $_FILES['filename']['name']; 
+                            $tmp_name = $_FILES['filename']['tmp_name'];
+                            $file_path = '..//games' . '/' . $name_file;
+                            move_uploaded_file($tmp_name, $file_path);
+                            $sql = "INSERT INTO mat_hang (ten_mat_hang, don_gia, the_loai, mo_ta, anh, dev_team_id, file_name) VALUES ('$gamename', '$price', '$menugame', '$motagame','$name_image', '$menudev','$name_file')";
                             $result = mysqli_query($conn, $sql);
                             if ($result) {
                                 echo "<script>alert('Thêm game thành công'); window.location.href='games.php';</script>";
@@ -174,6 +184,12 @@
                                 </select>
 
                                 <div style="color: red; font-size: 16px; font-weight: bold;"><?php if(isset($msg5)) {echo $msg5;} ?></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>File Game</th>
+                            <td>
+                            <input type="file" name="filename" id="filename" accept=".zip">
                             </td>
                         </tr>
                         <tr>
